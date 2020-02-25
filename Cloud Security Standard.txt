@@ -1,0 +1,174 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cloud Security Standard
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Version 1.0
+Name	Cloud Security Standard
+Date	
+
+
+Document Control
+TitleCloud Security StandardVersion1.0Version DateDocument StatusDocument ClassificationConfidentialDocument LocationReview FrequencyAnnual Last Review DateNext Review DateReviewed byApproved DateApproved byIssued toCyber Security Team
+Revision Management
+This document requires review from the following or nominated delegate prior to approval.
+
+NameTitle and ResponsibilityGlobal CISO
+Regulatory Disclosure
+This policy or procedure is designed to comply with the relevant statutes, laws, regulations, and rules applicable to the Firm in the jurisdictions in which it operates, including but not limited to, SEC’s Regulation SCI. 
+
+
+
+
+
+
+Revision History
+
+VersionVersion dateReviewed/ Updated ByDescription1.0Initial Draft
+Table of Contents
+1. 
+1. Purpose and Scope
+1.1 Purpose
+The purpose of this standard is to outline the security requirements for cloud services and capabilities in order to appropriately manage risk to Tradeweb and its data. 
+1.2 Scope
+The standards defined in this document apply to all cloud capabilities and services within all Tradeweb environments. 
+
+2. Background
+Cloud services provide enterprise organizations flexibility and new capabilities, however they can also introduce new risks that must be understood and addressed prior to implementing cloud services and leveraging capabilities. The effectiveness of cloud provider controls should be evaluated as if the activity were performed internally by Tradeweb. Cloud services hold several distinct advantages over traditional infrastructure, allowing for rapid large-scale deployment of computing resources. Cloud services and capabilities usually fit into four broad categories:
+* Infrastructure as a Service (IaaS)
+* Platform as a Service (PaaS)
+* Software as a Service (SaaS)
+* Cloud Access Security Brokers
+Cloud deployments can be public or private. Public clouds are owned and managed by a third-party while clouds are usually owned and operated on-premises. Security concerns depend upon the service type as well as the cloud service is deployed. Security should be a primary consideration when choosing a cloud service provider and deployment type. Private clouds shift more of the responsibility to the Tradeweb. With public clouds, Tradeweb will share security responsibilities with the Cloud Service Provider. Services that use the cloud to perform some functions (e.g. vulnerability management, encryption, backup services). 
+2.1 Cloud Components
+Cloud architectures are not standardized and each Cloud Service Provider (CSP) implements foundational cloud services differently. Understanding a CSP’s cloud implementation should be a part of a Tradeweb’s risk decision during cloud service procurement. There are usually four common cloud architectural services:
+* Identity and Access Management (IdAM): refers to controls in place for customers to protect access to resources as well as controls that the CSP uses to protect access to back-end cloud resources. 
+* Compute: Clouds generally rely on virtualization and containerization to manage and isolate computation workloads. 
+* Networking: Isolation of networks is critical security function of the cloud. In addition, cloud networking must implement controls throughout the cloud architecture to protect cloud resources from insider threat. 
+* Storage (Objects, Blocks, and Database Records): Customer data is logically separated from other customer data on cloud nodes. Security mechanisms must exist to ensure data is not leaked to other environments and that data is protected from insider threats. 
+3. Standards
+Based on open source research and subject matter expertise, the following standards have been created to allow for consistency across cloud service deployments. These standards will change in accordance with best practices and security threats to cloud environments. The failure to apply these standards may result in additional risk to Tradeweb’s business and data. Governing the cloud will be a combination of prevention, alerting, and auto-remediation without affecting agility to validate the level of security provided in the cloud environment is equal or better than the security provided on premises.  External and service provider tools will be used to govern and monitor cloud activities to ensure compliance with these standards. 
+3.1 Logging
+All cloud services must be logged and those logs must be maintained in a secure manner and in immutable storage. Whenever possible, those logs must be ingested into Tradeweb’s Security Event and Incident Monitoring (SIEM) tool, Splunk. A Splunk agent must be placed on the cloud server with connectivity back to the PROD for log ingestion.  
+All cloud logs must formatted, aggregated and centralized to allow for key security functions such as integration and analysis, auditing, forensic analysis, near real-time monitoring and alerting across regions and accounts. 
+3.2 Encryption and Key Management
+Cloud service providers usually offer encryption mechanism or services to encrypt data in transit and at rest. Encryption solutions may range from encrypted connections to limited encryption for sensitive data to end-to-end encryption of any data that is in transit or residing in the cloud environment. To meet Tradeweb’s data protection requirements, all data-in-transit and data-at-rest must be encrypted. All data must be encrypted with NIST compliant algorithms such as AES-256. 
+When selecting a cloud service provider, data encryption must be sufficient to meet Tradeweb’s requirements. Whenever possible, all sensitive data (classified as Internal, Confidential, or Restricted) should be encrypted prior to leaving Tradeweb’s on premise network.
+Similarly, the security and management of encryption keys is top security concern. Both public and private encryption keys should be stored separately from the encrypted data to ensure adequate protection of sensitive data. Private keys must never be stored on a remote instance. 
+All key backups shall be kept in a separate location and audited on a regular basis. Additionally, on a periodic basis, encryption keys must be set to expire automatically and refreshed within a 12 month period.  
+3.3 Identity and Access Management
+Cloud environments will need to manage people, roles, and identities to maintain the same security standards as on premise requirements to control access to Tradeweb data and customer data. Tradeweb also will need to ensure that service provider employees do not have access to data uploaded to Tradeweb cloud environments. 
+Wherever possible, cloud service providers must have identity and access management solutions which identify and authenticate each user with the appropriate rights which are appropriate to their role. While there are a numerous identity and access management solutions, Tradeweb should use the following capabilities which align with Tradeweb’s termination policies:
+* Temporary credentials
+* Multifactor Authentication
+* Federated Access
+* Single Sign-On with Okta integration
+* Privileged access and identity management
+3.3.1 Security Groups
+Servers and instance profiles must follow the principle of least privilege which includes utilizing security groups. Security groups act as a firewall for each instance to control inbound and outbound traffic. For each security group, rules must be set to control inbound and outbound traffic. The following are some guidelines for Security Groups:
+
+* When creating a security group, it has no inbound rules. Therefore, no inbound traffic originating from another host to an instance is allowed until you add inbound rules to the security group.
+* By default, a security group includes an outbound rule that allows all outbound traffic.
+* For outbound connections, all outbound access must be restricted to HTTPS only - 0.0.0.0/0:443.
+* Security groups are stateful — if a request comes from an instance, the response traffic for that request is allowed to flow in regardless of inbound security group rules.
+3.3.2 Password Management
+All cloud service providers must meet or exceed the following password requirements:
+* Require lowercase, uppercase characters, numbers, and symbols. 
+* Allow users to change passwords
+* Minimum Password Length = 14
+* Max Password Age = 60 
+* Password Reuse Prevention = 24 months
+If permanent credentials are required, they must:
+* Must include a policy binding the User to an IP or predefined CIDR. 
+* Must rotate access key ID every 90 days. 
+* Must have 2 sets of access keys created and only one active at a time. 
+3.3.3 Configuration Management
+Configuration Management is the process for establishing and maintaining consistency of a cloud resource's settings, performance, and functional characteristics throughout its lifecycle. In practice, this means Tradeweb must understand how cloud resources are setup, accessed, managed, and de-provisioned.
+Cloud services must be configured with the appropriate governance tool. 
+3.3.4 Bastion Hosts
+Bastion hosts are instances that sit within your public subnet and are typically accessed using SSH or RDP. Once remote connectivity has been established with the bastion host, it then acts as a ‘jump’ server, allowing you to use SSH or RDP to log in to other instances (within private subnets) deeper within your VPC. When designing the bastion host, it should only be used for remote connectivity and no other activities. Bastion hosts must be configured with security groups to maintain the security of the cloud system. Additionally, all outbound connections should be restricted to SSH or RDP access to the private instances of the cloud service infrastructure. 
+3.3.5 Multi-Tenancy
+A multi-tenant allows customers to share computing resources in a public or private cloud. Each tenant's data is isolated and remains invisible to other tenants. In a multi-tenant cloud system, users have individualized space for storing their projects and data. Prior to using cloud services, any use of a multi-tenant environment must ensure that Tradeweb’s information is secure through the following:
+* Logical separation at the logical unit number
+* Separate disk arrays
+* Dedicated clusters
+* Strict access controls
+
+3.4 Security Services
+3.4.1 Continuous Monitoring and Threat Detection
+All cloud environments must support threat detection services that continuously monitor for malicious activity and unauthorized behavior to protect Tradeweb’s data and environment. Any threat monitoring solution must be fully managed by the cloud provider and leverage threat intelligence to detect high-risk and costly threats such as crypto-mining, unauthorized access, distributed denial of service (DDoS) attacks and brute-force attacks.
+If the threat detection service is regional, the cloud provider must be able to analyze data regionally and aggregate those results by region. Likewise all security alerts must be able to integrate with the existing event management system and workflow. Wherever possible, automation should be used based on known security rules and findings. 
+3.4.2 Vulnerabilities and Mitigations
+In order to maintain confidence in the security of cloud environments and to manage risk for our clients and customers, each cloud environment must be equipped to manage vulnerabilities and their respective mitigations. Ideally, a vulnerability assessment and management solution will monitor the instances’ security and compliance posture to prevent against any known exploits. 
+All vulnerability information must be sent to the Cybersecurity team for review and management. After a review of the vulnerabilities has taken place, all instances must be patched in accordance with Tradeweb’s Patch Management Procedures using approved AMIs. 
+All instance vulnerability scans will be conducted by Inspector. 
+3.4.3 Incident Management
+All cloud services must be able to identify incidents and provide a report to Tradeweb. At a minimum, the service provider must allow Tradeweb to participate in the identification, containment, eradication, and remediation of any incident related to cloud infrastructure.  
+3.5 Reliability, Availability, and Performance
+The reliability, availability and performance of cloud services will be essential to the functionality of business critical applications and systems to maintain consumer confidence and preventing revenue losses. In the current environment critical systems Tradeweb-managed infrastructure must be high availability and these requirements are required for all cloud services.  Any cloud service must be able to provide 99.999% availability or create multiple availability zones, to limit the impact to trading services which are directly related to Tradeweb’s dependability and viability. 
+3.5.1 Portability and Interoperability
+For a poly-cloud environment to be successful, any cloud service must allow Tradeweb to export data to another cloud at any time for additional analysis. Likewise, cloud services must have open APIs for interoperability to allow Tradeweb to develop services in other environments for business continuity and disaster recovery efforts.
+ 
+4. Exceptions
+All exceptions must be reviewed and approved by the CISO and Risk Management in conjunction with the data owner. All exceptions will be logged and re-evaluated on a periodic basis. 
+
+Confidential: this document is Confidential and Proprietary Property of Tradeweb. Unauthorized copying, disclosure, distribution, sharing or removal of any information, segment, or the entire document, internally or externally, in any form or media is strictly PROHIBITED. Any violations by Tradeweb employees, visitors or anyone exposed to this document may result in immediate termination of employment or contract and/or legal proceedings accordingly. Including, but not limited to, civil and criminal liability lawsuits. 
+
+
+
+
+Confidential: this document is Confidential and Proprietary Property of Tradeweb. Unauthorized copying, disclosure, distribution, sharing or removal of any information, segment, or the entire document, internally or externally, in any form or media is strictly PROHIBITED. Any violations by Tradeweb employees, visitors or anyone exposed to this document may result in immediate termination of employment or contract and/or legal proceedings accordingly. Including, but not limited to, civil and criminal liability lawsuits.
+
+
+
+
+
+
+
+
