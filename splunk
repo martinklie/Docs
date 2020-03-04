@@ -1,0 +1,48 @@
+URL for Splunk Prd
+https://splunkes.tradeweb.com:8000/en-US/account/logout
+
+All entries from index
+* index=aws_glb
+
+
+
+Check All for AccessDenied as errorCode
+* index=aws_glb errorCode=AccessDenied
+
+List of Indexes
+| rest splunk_server=* count=0 /services/data/indexes
+| eval minTime=strftime(round(strptime(minTime,"%F"),0),"%F"),  maxTime=strftime(round(strptime(maxTime,"%F"),0),"%F"), retentionPeriodinDays=frozenTimePeriodInSecs/86400
+| stats min(minTime) as "Oldest Event", max(maxTime) as "Latest Event", min(retentionPeriodinDays) as "Min Retention Period (Days)", max(retentionPeriodinDays) as "Max Retention Period (Days)" by title
+| search ("Oldest Event"=* OR "Latest Event"=*)
+| rename title as Index
+
+Alert for Cloudtrail logs into Splunk 
+| tstats count where index=aws_glb sourcetype=aws:cloudtrail earliest=-1hr latest=now | search count<10000
+
+AWS Cloudtrail
+
+Alert if AWS aggregate log for Cloudtrail goes below 10k/hr
+
+Report IPs accessing Cloudtrail excluding *amazonaws.com
+index=aws_glb sourcetype=aws:cloudtrail sourceIPAddress=* NOT sourceIPAddress IN (*.amazonaws.com,)
+
+| stats count by sourceIPAddress
+
+| sort - count
+
+Report on AccessDenied with exclusions
+index=aws_glb sourcetype=aws:cloudtrail errorCode=AccessDenied NOT sourceIPAddress IN (*.amazonaws.com,) NOT errorMessage IN (*prisma*) NOT eventSource IN (*.amazonaws.com,)
+
+| stats count by sourceIPAddress
+
+| sort - count
+
+Alert for Snowflake logs into Splunk
+| tstats count where index=snowflakeglb_us earliest=-1hr latest=now | search count<1
+
+Report user accessing a specified domain - Zscaler
+| tstats summariesonly=false count from datamodel=Web where Web.dest=*cellocapital* earliest=-20d by Web.user, Web.dest
+
+Report what IPs are accessing Snowflake
+index=snowflakeglb_us CLIENT_IP USER_NAME earliest=-24hr latest=now | stats count by CLIENT_IP, USER_NAME | sort - count
+
