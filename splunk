@@ -1,5 +1,4 @@
 URL for Splunk Prd
-https://splunkes.tradeweb.com:8000/en-US/account/logout
 
 All entries from index
 * index=aws_glb
